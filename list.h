@@ -36,8 +36,8 @@ typedef struct _node
     struct _node *next;
 } list;
 
-void add_element(list **list, void *data);
-void destroy_list(list *list);
+void add_element(list **head, void *data);
+void destroy_list(list *head);
 void print_student_list(list *slist);
 void print_course_score_list(list *clist);
 void print_joinex_list(list *jlist);
