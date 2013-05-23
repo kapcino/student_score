@@ -21,7 +21,7 @@ void create_student_list(list **slist)
 void create_course_list(list **clist)
 {
     add_score_record_with_check(clist, "2012001", "1001", "History",  1, 80);
-    add_score_record_with_check(clist, "2012002", "1001", "Politics", 2, 70);
+    add_score_record_with_check(clist, "2012001", "1002", "Politics", 2, 70);
     add_score_record_with_check(clist, "2012001", "1003", "English",  3, 80);
     add_score_record_with_check(clist, "2012001", "1004", "Math",     4, 90);
 
@@ -43,8 +43,10 @@ void menu()
 {
     list *slist = NULL;
     list *clist = NULL;
+    list *jlist = NULL;
     create_student_list(&slist);
     create_course_list(&clist);
+    int joined = 0;             /* joined == 1, join action perfromed */
     int choice = 0;
 
     while(1)
@@ -67,16 +69,21 @@ void menu()
             print_course_score_list(clist);        
             break;
         case 3:
-            
+            if (joined == 0)
+            {
+                join_lists(&jlist, slist, clist);
+                joined = 1;
+            }
+            print_joinex_list(jlist);
             break;    
         case 4:
             destroy_list(slist);
             destroy_list(clist);
             puts("Exit program.");
-            exit(0);    
-        default:
+            exit(0);            /* exit successfully */
+        default:                /* not in the choices list */
             puts("Invalid Choice.\nRefer MENU for further assistance.");
-            break;
+            exit(-1);           /* exit with error */
         }
     }
 }

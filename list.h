@@ -45,3 +45,5 @@ void add_student(list **slist, char *no, char *name, int gender, char* specialit
 void add_student_with_check(list **slist, char *no, char *name, int gender, char* speciality, char *department);
 void add_score_record(list **clist, char *stu_no, char *course_no, char *course_name, int course_credit, int stu_score);
 void add_score_record_with_check(list **clist, char *stu_no, char *course_no, char *course_name, int course_credit, int stu_score);
+score_record *find_score_record(list *clist, char *stu_no, char *course_no);
+void join_lists(list **jlist, list *slist, list *clist);
