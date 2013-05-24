@@ -53,31 +53,24 @@ void menu()
     int choice = 0;
     while(1)
     {
-        puts("\nMENU");
-        puts("Press 1 : To print student table, as it is.");
-        puts("Press 11 : To print student table, sorted by no.");
-        puts("Press 12 : To print student table, sorted by name.");
-        puts("Press 13 : To print student table, sorted by speciality.");
-
-        puts("");
-        puts("Press 2 : To print course score table, as it is.");
-        puts("Press 21 : To print course score table, sorted by student no.");
-        puts("Press 22 : To print course score table, sorted by course name.");
-        puts("Press 23 : To print course score table, sorted by course credit.");
-        puts("Press 24 : To print course score table, sorted by student score.");
-
-        puts("");
-        puts("Press 3 : To display the joined table, as it is.");
-        puts("Press 3 : To display the joined table, sorted by student no.");
-        puts("Press 3 : To display the joined table, sorted by studet name.");
-        puts("Press 3 : To display the joined table, sorted by average score.");
-
-        puts("");
-        puts("Press 4 : To Exit the PROGRAM.");
-        puts("\n*************************************");
+        puts("MENU");
+        puts("Press  1: To print student table, as it is.");
+        puts("Press 11: To print student table, sorted by no.");
+        puts("Press 12: To print student table, sorted by name.");
+        puts("Press 13: To print student table, sorted by speciality.");
+        puts("Press  2: To print course score table, as it is.");
+        puts("Press 21: To print course score table, sorted by student no.");
+        puts("Press 22: To print course score table, sorted by course name.");
+        puts("Press 23: To print course score table, sorted by course credit.");
+        puts("Press 24: To print course score table, sorted by student score.");
+        puts("Press  3: To print the joined table, as it is.");
+        puts("Press 31: To print the joined table, sorted by student no.");
+        puts("Press 32: To print the joined table, sorted by studet name.");
+        puts("Press 33: To print the joined table, sorted by average score.");
+        puts("Press  4: To exit the PROGRAM.");
+        puts("*************************************");
         printf("Enter your choice here : ");
         scanf("%d", &choice);
-        puts("");
 
         switch(choice)
         {
