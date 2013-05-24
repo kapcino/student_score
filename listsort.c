@@ -37,14 +37,15 @@ void front_back_split(list *head, list **front, list **back)
 
 /* cmp is a pointer to function, different cmp provides sorting with different criteria */
 /* cmp can compare with no, name, score, etc. */
-list *sorted_merge(list *a, list *b, int (*cmp)(list *a, list *b))
+list *sorted_merge(list *a, list *b, float (*cmp)(list *a, list *b))
 {
     list *result = NULL;
     if (!a) return b;
     if (!b) return a;
 
     /* Pick either a or b, and recur */
-    if (cmp(a, b) <= 0)
+    /* for int, <= 0 is OK, but for float needs checking range*/
+    if ((cmp(a, b) <= 0.000000001)) 
     {
         result = a;
         result->next = sorted_merge(a->next, b, cmp);
@@ -57,7 +58,7 @@ list *sorted_merge(list *a, list *b, int (*cmp)(list *a, list *b))
     return(result);
 }
 
-void merge_sort(list **headRef, int (*cmp)(list *a, list *b))
+void merge_sort(list **headRef, float (*cmp)(list *a, list *b))
 {
     list *head = *headRef;
     list *a = NULL;

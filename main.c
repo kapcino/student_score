@@ -54,7 +54,7 @@ void menu()
     while(1)
     {
         choice = 0;             /* reset to 0 to avoid keeping the last valid value */
-        puts("*************************************");
+        puts("***********************************************************");
         puts("MENU");
         puts("Press 11: To print student table, sorted by no.");
         puts("Press 12: To print student table, sorted by name.");
@@ -68,7 +68,7 @@ void menu()
         puts("Press 32: To print the joined table, sorted by studet name.");
         puts("Press 33: To print the joined table, sorted by course score.");
         puts("Press  4: To exit the PROGRAM.");
-        puts("*************************************");
+        puts("***********************************************************");
         printf("Enter your choice here : ");
         scanf("%d", &choice);
 
@@ -133,6 +133,9 @@ void menu()
             print_joined_list(jlist);
             break;    
         case 4:
+            get_average_score_rank_no(slist, clist, "2012002");
+            break;
+        case 6:
             destroy_list(slist);
             destroy_list(clist);
             puts("Exit program.");

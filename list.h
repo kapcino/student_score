@@ -45,18 +45,26 @@ void print_student_list(list *slist);
 void print_course_score_list(list *clist);
 void print_joined_list(list *jlist);
 
-int compare_stu_no(list *a, list *b);
-int compare_stu_name(list *a, list *b);
-int compare_stu_speciality(list *a, list *b);
-int compare_stu_average_score(list *a, list *b);
+float compare_stu_no(list *a, list *b);
+float compare_stu_name(list *a, list *b);
+float compare_stu_speciality(list *a, list *b);
+float compare_stu_average_score(list *a, list *b);
 
-int compare_course_stuno(list *a, list *b);
-int compare_course_cno(list *a, list *b);
-int compare_course_name(list *a, list *b);
-int compare_course_credit(list *a, list *b);
-int compare_course_student_score(list *a, list *b);
+float compare_course_stuno(list *a, list *b);
+float compare_course_cno(list *a, list *b);
+float compare_course_name(list *a, list *b);
+float compare_course_credit(list *a, list *b);
+float compare_course_student_score(list *a, list *b);
 
-int compare_joined_student_no(list *a, list *b);
-int compare_joined_student_name(list *a, list *b);
-int compare_joined_student_score(list *a, list *b);
-void merge_sort(list **headRef, int (*cmp)(list *a, list *b));
+float compare_joined_student_no(list *a, list *b);
+float compare_joined_student_name(list *a, list *b);
+float compare_joined_student_score(list *a, list *b);
+void merge_sort(list **headRef, float (*cmp)(list *a, list *b));
+
+void get_average_score_rank_no(list *slist, list *clist, char *stu_no);
+void get_average_score_rank_name(list *slist, list *clist, char *stu_name);
+
+void get_all_average_score_not_pass_no(char *speciality, char *course_no);
+void get_all_average_score_not_pass_name(char *speciality, char *course_name);
+
+void get_specific_students_speciality();

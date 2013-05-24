@@ -271,7 +271,7 @@ void join_lists(list **jlist, list *slist, list *clist)
     }
 }
 
-int compare_stu_no(list *a, list *b) /* compare the student no in student table */
+float compare_stu_no(list *a, list *b) /* compare the student no in student table */
 {
     if (!a || !b) return 0;     /* invalid case, should go here */
     student *stua = get_student(a);
@@ -279,7 +279,7 @@ int compare_stu_no(list *a, list *b) /* compare the student no in student table 
     return strcmp(stua->stu_no, stub->stu_no);
 }
 
-int compare_stu_name(list *a, list *b) /* compare the student name in student table */
+float compare_stu_name(list *a, list *b) /* compare the student name in student table */
 {
     if (!a || !b) return 0;     /* invalid case, should go here */
     student *stua = get_student(a);
@@ -287,7 +287,7 @@ int compare_stu_name(list *a, list *b) /* compare the student name in student ta
     return strcmp(stua->stu_name, stub->stu_name);
 }
 
-int compare_stu_speciality(list *a, list *b) /* compare the speciality in student table */
+float compare_stu_speciality(list *a, list *b) /* compare the speciality in student table */
 {
     if (!a || !b) return 0;
     student *stua = get_student(a);
@@ -295,7 +295,7 @@ int compare_stu_speciality(list *a, list *b) /* compare the speciality in studen
     return strcmp(stua->stu_speciality, stub->stu_speciality);
 }
 
-int compare_stu_average_score(list *a, list *b) /* compare the average score in student table */
+float compare_stu_average_score(list *a, list *b) /* compare the average score in student table */
 {
     if (!a || !b) return 0;
     student *stua = get_student(a);
@@ -303,7 +303,7 @@ int compare_stu_average_score(list *a, list *b) /* compare the average score in 
     return stua->stu_average_score - stub->stu_average_score;
 }
 
-int compare_course_stuno(list *a, list *b)
+float compare_course_stuno(list *a, list *b)
 {
     if (!a || !b) return 0;
     score_record *sra = get_score_record(a);
@@ -311,7 +311,7 @@ int compare_course_stuno(list *a, list *b)
     return strcmp(sra->stu_no, srb->stu_no);
 }
 
-int compare_course_cno(list *a, list *b)
+float compare_course_cno(list *a, list *b)
 {
     if (!a || !b) return 0;
     score_record *sra = get_score_record(a);
@@ -319,7 +319,7 @@ int compare_course_cno(list *a, list *b)
     return strcmp(sra->course_no, srb->course_no);
 }
 
-int compare_course_name(list *a, list *b)
+float compare_course_name(list *a, list *b)
 {
     if (!a || !b) return 0;
     score_record *sra = get_score_record(a);
@@ -327,7 +327,7 @@ int compare_course_name(list *a, list *b)
     return strcmp(sra->course_name, srb->course_name);
 }
 
-int compare_course_credit(list *a, list *b)
+float compare_course_credit(list *a, list *b)
 {
     if (!a || !b) return 0;
     score_record *sra = get_score_record(a);
@@ -335,7 +335,7 @@ int compare_course_credit(list *a, list *b)
     return sra->course_credit - srb->course_credit;
 }
 
-int compare_course_student_score(list *a, list *b)
+float compare_course_student_score(list *a, list *b)
 {
     if (!a || !b) return 0;
     score_record *sra = get_score_record(a);
@@ -343,7 +343,7 @@ int compare_course_student_score(list *a, list *b)
     return sra->stu_score - srb->stu_score;
 }
 
-int compare_joined_student_no(list *a, list *b)
+float compare_joined_student_no(list *a, list *b)
 {
     if (!a || !b) return 0;
     student_score_record *reca = get_joined_record(a);
@@ -351,7 +351,7 @@ int compare_joined_student_no(list *a, list *b)
     return strcmp(reca->stu_no, recb->stu_no);
 }
 
-int compare_joined_student_name(list *a, list *b)
+float compare_joined_student_name(list *a, list *b)
 {
     if (!a || !b) return 0;
     student_score_record *reca = get_joined_record(a);
@@ -359,10 +359,68 @@ int compare_joined_student_name(list *a, list *b)
     return strcmp(reca->stu_name, recb->stu_name);
 }
 
-int compare_joined_student_score(list *a, list *b)
+float compare_joined_student_score(list *a, list *b)
 {
     if (!a || !b) return 0;
     student_score_record *reca = get_joined_record(a);
     student_score_record *recb = get_joined_record(b);
     return reca->stu_score - recb->stu_score;
+}
+
+
+void get_average_score_rank_no(list *slist, list *clist, char *stu_no)
+{
+    if (!slist || !clist || !stu_no)
+    {
+        printf("get_average_score_rank:Parameter error.\n");
+        return;
+    }
+
+    list *jlist = NULL;
+    list *shead = slist;
+    join_lists(&jlist, slist, clist);
+    merge_sort(&shead, compare_stu_average_score);
+
+    student *stu = NULL;
+    int position = 0;
+    int total_student = 0;
+    float avg_score = 0.0;
+    int found = 0;
+    list *cur = shead;    
+    
+    while (cur)
+    {
+        stu = get_student(cur);
+        if (strcmp(stu->stu_no, stu_no) != 0) /* not find the target student */
+            position ++;                      /* save the position */
+        else
+        {
+            avg_score = stu->stu_average_score;
+            found = 1;
+        }
+        total_student ++;
+        cur = cur->next;
+    }
+    
+    destroy_list(jlist);
+    int rank = total_student - position;
+    if (found == 0)
+        printf("Fail to find the info for student: %s.\n", stu_no);
+    else
+        printf("Find student: %7s, average score: %5.4g, rank: %3d.\n", stu_no, avg_score, rank);
+}
+
+void get_average_score_rank_name(list *slist, list *clist, char *stu_no)
+{
+}
+
+void get_all_average_score_not_pass_no(char *speciality, char *course_no)
+{
+}
+void get_all_average_score_not_pass_name(char *speciality, char *course_name)
+{
+}
+
+void get_specific_students_speciality()
+{
 }
