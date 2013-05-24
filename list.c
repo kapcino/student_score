@@ -35,7 +35,12 @@ score_record *get_score_record(list *clist)
     return (score_record *)get_element_data(clist);
 }
 
-student_score_record *get_joined_recored(student *stu, score_record *record)
+student_score_record *get_joined_record(list *jlist)
+{
+    return (student_score_record *)get_element_data(jlist);
+}
+
+student_score_record *create_joined_recored(student *stu, score_record *record)
 {
     if (!stu || !record) return NULL;
     student_score_record *jrecord = (student_score_record *)malloc(sizeof(student_score_record));
@@ -155,7 +160,7 @@ void print_student_list(list *slist)
     {
         student_element = (student *)(current_element->data);
         char gender = (student_element->stu_gender == 0) ? 'M' : 'F';
-        printf("student no: %-7s, name: %-10s, gender: %1c, speciality: %-16s, department: %-15s, average score: %-3.1g\n", student_element->stu_no, student_element->stu_name, gender, student_element->stu_speciality, student_element->stu_departmant, student_element->stu_average_score);
+        printf("student no: %7s, name: %10s, gender: %1c, speciality: %10s, department: %15s, average score: %3.1g\n", student_element->stu_no, student_element->stu_name, gender, student_element->stu_speciality, student_element->stu_departmant, student_element->stu_average_score);
         current_element = current_element->next;
     }
     printf("print student list done.\n\n");
@@ -170,13 +175,13 @@ void print_course_score_list(list *clist)
     while (current_element)
     {
         record = (score_record *)current_element->data;
-        printf("student no: %-7s, course no: %-4s, course name: %-10s, course credit: %1d, student score: %3d\n", record->stu_no, record->course_no,  record->course_name, record->course_credit, record->stu_score);
+        printf("student no: %7s, course no: %4s, course name: %10s, course credit: %1d, student score: %3d\n", record->stu_no, record->course_no,  record->course_name, record->course_credit, record->stu_score);
         current_element = current_element->next;
     }
     printf("print course score list done.\n\n");
 }
 
-void print_joinex_list(list *jlist)
+void print_joined_list(list *jlist)
 {
     printf("print joined student and course list.\n");
     list *current_element = jlist;
@@ -186,7 +191,7 @@ void print_joinex_list(list *jlist)
     {
         ssrecord = (student_score_record*)current_element->data;
         char gender = (ssrecord->stu_gender == 0) ? 'M' : 'F';
-        printf("SNo: %-7s, SName: %-10s, SGd: %c, Spec: %-10s, Dept: %-10s, CNo: %-7s, CName: %-10s, CCredit: %-1d, Score: %-3.1d\n", ssrecord->stu_no, ssrecord->stu_name, gender, ssrecord->stu_speciality, ssrecord->stu_departmant, ssrecord->course_no, ssrecord->course_name, ssrecord->course_credit, ssrecord->stu_score);
+        printf("SNo: %7s, SName: %10s, SGd: %c, Spec: %10s, Dept: %10s, CNo: %4s, CName: %10s, CCredit: %1d, Score: %3.1d\n", ssrecord->stu_no, ssrecord->stu_name, gender, ssrecord->stu_speciality, ssrecord->stu_departmant, ssrecord->course_no, ssrecord->course_name, ssrecord->course_credit, ssrecord->stu_score);
         current_element = current_element->next;
     }
     printf("done to print joined student and course list.\n");
@@ -211,7 +216,6 @@ void join_lists(list **jlist, list *slist, list *clist)
             shead = shead->next;
             continue;            /* NULL pinter checking */
         }
-
         if (chead == NULL) chead = clist;  /* two loops, reset the second pointer when it reaches end */
         while (chead)
         {
@@ -221,14 +225,12 @@ void join_lists(list **jlist, list *slist, list *clist)
                 chead = chead->next;
                 continue;                  /* not the same record for the student no */
             }
-            
-            jrec = get_joined_recored(stu, rec); /* find the record for the specific student no */
+            jrec = create_joined_recored(stu, rec); /* find the record for the specific student no */
             if (!jrec)
             {
                 chead = chead->next;
                 continue;
             }
-            
             add_joined_record(jlist, jrec); /* add new joined jrec into jlist */
             rec = jrec = NULL;  /* reset temmporary pointer to NULL */
             chead = chead->next;
@@ -237,4 +239,52 @@ void join_lists(list **jlist, list *slist, list *clist)
         stu = NULL;
         shead = shead->next;
     }
+}
+
+int compare_stu_no(list *a, list *b) /* compare the student no in student table */
+{
+    if (!a || !b) return 0;     /* invalid case, should go here */
+    student *stua = get_student(a);
+    student *stub = get_student(b);
+    return strcmp(stua->stu_no, stub->stu_no);
+}
+
+int compare_stu_name(list *a, list *b) /* compare the student name in student table */
+{
+    if (!a || !b) return 0;     /* invalid case, should go here */
+    student *stua = get_student(a);
+    student *stub = get_student(b);
+    return strcmp(stua->stu_name, stub->stu_name);
+}
+
+int compare_stu_speciality(list *a, list *b) /* compare the speciality in student table */
+{
+    if (!a || !b) return 0;
+    student *stua = get_student(a);
+    student *stub = get_student(b);
+    return strcmp(stua->stu_speciality, stub->stu_speciality);
+}
+
+int compare_stu_average_score(list *a, list *b) /* compare the average score in student table */
+{
+    if (!a || !b) return 0;
+    student *stua = get_student(a);
+    student *stub = get_student(b);
+    return stua->stu_average_score - stub->stu_average_score;
+}
+
+int compare_joimed_no(list *a, list *b)
+{
+    if (!a || !b) return 0;
+    student_score_record *reca = get_joined_record(a);
+    student_score_record *recb = get_joined_record(b);
+    return strcmp(reca->stu_no, recb->stu_no);
+}
+
+int compare_joimed_name(list *a, list *b)
+{
+    if (!a || !b) return 0;
+    student_score_record *reca = get_joined_record(a);
+    student_score_record *recb = get_joined_record(b);
+    return strcmp(reca->stu_name, recb->stu_name);
 }

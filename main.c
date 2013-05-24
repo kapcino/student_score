@@ -5,16 +5,18 @@
 
 void create_student_list(list **slist)
 {
+
+    add_student_with_check(slist, "2012007", "Tong Xuan",  1, "Computer",   "Applied Technology");
+    add_student_with_check(slist, "2012008", "Xiao Xia",   1, "Traffic",   "Applied Technology");
+    add_student_with_check(slist, "2012009", "Xiang Gang", 0, "Computer",   "Applied Technology");
+    add_student_with_check(slist, "2012010", "Lu Jia",     0, "Accounting", "Applied Technology");
+
     add_student_with_check(slist, "2012001", "Zhang Nan",  0, "Computer",   "Applied Technology");
     add_student_with_check(slist, "2012002", "Li Wei",     0, "Economy",    "Applied Technology");
     add_student_with_check(slist, "2012003", "Jin Gang",   0, "Language",   "Applied Technology");
     add_student_with_check(slist, "2012004", "Li Xue",     1, "Culture",    "Applied Technology");
     add_student_with_check(slist, "2012005", "Hui Nan",    1, "Computer",   "Applied Technology");
     add_student_with_check(slist, "2012006", "Liu Xiang",  0, "Vehicle",     "Applied Technology");
-    add_student_with_check(slist, "2012007", "Tong Xuan",  1, "Computer",   "Applied Technology");
-    add_student_with_check(slist, "2012008", "Xiao Xia",   1, "Traffic",   "Applied Technology");
-    add_student_with_check(slist, "2012009", "Xiang Gang", 0, "Computer",   "Applied Technology");
-    add_student_with_check(slist, "2012010", "Lu Jia",     0, "Accounting", "Applied Technology");
     puts("Finish to create student list.");
 }
 
@@ -46,35 +48,61 @@ void menu()
     list *jlist = NULL;
     create_student_list(&slist);
     create_course_list(&clist);
-    int joined = 0;             /* joined == 1, join action perfromed */
-    int choice = 0;
+    join_lists(&jlist, slist, clist);
 
+    int choice = 0;
     while(1)
     {
         puts("\nMENU");
-        puts("Press 1 : To print student table.");
-        puts("Press 2 : To print course score table.");
-        puts("Press 3 : To display the CONTENTS.");
+        puts("Press 1 : To print student table, as it is.");
+        puts("Press 11 : To print student table, sorted by no.");
+        puts("Press 12 : To print student table, sorted by name.");
+        puts("Press 13 : To print student table, sorted by speciality.");
+
+        puts("");
+        puts("Press 2 : To print course score table, as it is.");
+        puts("Press 21 : To print course score table, sorted by student no.");
+        puts("Press 22 : To print course score table, sorted by course name.");
+        puts("Press 23 : To print course score table, sorted by course credit.");
+        puts("Press 24 : To print course score table, sorted by student score.");
+
+        puts("");
+        puts("Press 3 : To display the joined table, as it is.");
+        puts("Press 3 : To display the joined table, sorted by student no.");
+        puts("Press 3 : To display the joined table, sorted by studet name.");
+        puts("Press 3 : To display the joined table, sorted by average score.");
+
+        puts("");
         puts("Press 4 : To Exit the PROGRAM.");
-        puts("*************************************");
+        puts("\n*************************************");
         printf("Enter your choice here : ");
         scanf("%d", &choice);
+        puts("");
 
         switch(choice)
         {
         case 1:
             print_student_list(slist);
             break;
+        case 11:
+            MergeSort(&slist, compare_stu_no);
+            print_student_list(slist);
+            break;
+        case 12:
+            MergeSort(&slist, compare_stu_name);
+            print_student_list(slist);
+            break;
+        case 13:
+            MergeSort(&slist, compare_stu_speciality);
+            print_student_list(slist);
+            break;
         case 2:
             print_course_score_list(clist);        
             break;
         case 3:
-            if (joined == 0)
-            {
-                join_lists(&jlist, slist, clist);
-                joined = 1;
-            }
-            print_joinex_list(jlist);
+            print_joined_list(jlist);
+            MergeSort(&jlist, compare_joimed_name);
+            print_joined_list(jlist);
             break;    
         case 4:
             destroy_list(slist);
@@ -83,6 +111,8 @@ void menu()
             exit(0);            /* exit successfully */
         default:                /* not in the choices list */
             puts("Invalid Choice.\nRefer MENU for further assistance.");
+            destroy_list(slist);
+            destroy_list(clist);
             exit(-1);           /* exit with error */
         }
     }

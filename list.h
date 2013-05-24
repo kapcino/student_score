@@ -47,3 +47,9 @@ void add_score_record(list **clist, char *stu_no, char *course_no, char *course_
 void add_score_record_with_check(list **clist, char *stu_no, char *course_no, char *course_name, int course_credit, int stu_score);
 score_record *find_score_record(list *clist, char *stu_no, char *course_no);
 void join_lists(list **jlist, list *slist, list *clist);
+int compare_stu_no(list *a, list *b);
+int compare_stu_name(list *a, list *b);
+int compare_stu_speciality(list *a, list *b);
+int compare_joimed_no(list *a, list *b);
+int compare_joimed_name(list *a, list *b);
+list *mregesort(list *head, int (*cmp)(list *a, list *b));
