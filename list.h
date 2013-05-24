@@ -58,4 +58,5 @@ int compare_course_student_score(list *a, list *b);
 
 int compare_joined_student_no(list *a, list *b);
 int compare_joined_student_name(list *a, list *b);
+int compare_joined_student_score(list *a, list *b);
 void merge_sort(list **headRef, int (*cmp)(list *a, list *b));

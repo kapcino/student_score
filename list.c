@@ -153,7 +153,7 @@ void destroy_list(list *head)
 
 void print_student_list(list *slist)
 {
-    printf("print student list:\n");
+    printf("=====================print student list:===================\n");
     list *current_element = slist;
     student *student_element;
 
@@ -170,12 +170,11 @@ void print_student_list(list *slist)
                student_element->stu_average_score);
         current_element = current_element->next;
     }
-    printf("print student list done.\n\n");
 }
 
 void print_course_score_list(list *clist)
 {
-    printf("print course score list.\n");
+    printf("===================print couse score list:=================\n");
     list *current_element = clist;
     score_record *record;
 
@@ -190,12 +189,11 @@ void print_course_score_list(list *clist)
                record->stu_score);
         current_element = current_element->next;
     }
-    printf("print course score list done.\n\n");
 }
 
 void print_joined_list(list *jlist)
 {
-    printf("print joined student and course list.\n");
+    printf("=====================print joined list:====================\n");
     list *current_element = jlist;
     student_score_record *ssrecord;
 
@@ -215,7 +213,6 @@ void print_joined_list(list *jlist)
                ssrecord->stu_score);
         current_element = current_element->next;
     }
-    printf("done to print joined student and course list.\n");
 }
 
 void join_lists(list **jlist, list *slist, list *clist)
@@ -343,7 +340,7 @@ int compare_course_student_score(list *a, list *b)
     if (!a || !b) return 0;
     score_record *sra = get_score_record(a);
     score_record *srb = get_score_record(b);
-    return strcmp(sra->stu_no, srb->stu_no);
+    return sra->stu_score - srb->stu_score;
 }
 
 int compare_joined_student_no(list *a, list *b)
@@ -360,4 +357,12 @@ int compare_joined_student_name(list *a, list *b)
     student_score_record *reca = get_joined_record(a);
     student_score_record *recb = get_joined_record(b);
     return strcmp(reca->stu_name, recb->stu_name);
+}
+
+int compare_joined_student_score(list *a, list *b)
+{
+    if (!a || !b) return 0;
+    student_score_record *reca = get_joined_record(a);
+    student_score_record *recb = get_joined_record(b);
+    return reca->stu_score - recb->stu_score;
 }

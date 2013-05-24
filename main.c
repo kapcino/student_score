@@ -54,20 +54,19 @@ void menu()
     while(1)
     {
         choice = 0;             /* reset to 0 to avoid keeping the last valid value */
+        puts("*************************************");
         puts("MENU");
-        puts("Press  1: To print student table, as it is.");
         puts("Press 11: To print student table, sorted by no.");
         puts("Press 12: To print student table, sorted by name.");
         puts("Press 13: To print student table, sorted by speciality.");
-        puts("Press  2: To print course score table, as it is.");
+        puts("Press 14: To print student table, sorted by average score.");
         puts("Press 21: To print course score table, sorted by student no.");
         puts("Press 22: To print course score table, sorted by course name.");
         puts("Press 23: To print course score table, sorted by course credit.");
         puts("Press 24: To print course score table, sorted by student score.");
-        puts("Press  3: To print the joined table, as it is.");
         puts("Press 31: To print the joined table, sorted by student no.");
         puts("Press 32: To print the joined table, sorted by studet name.");
-        puts("Press 33: To print the joined table, sorted by average score.");
+        puts("Press 33: To print the joined table, sorted by course score.");
         puts("Press  4: To exit the PROGRAM.");
         puts("*************************************");
         printf("Enter your choice here : ");
@@ -76,25 +75,61 @@ void menu()
         switch(choice)
         {
         case 1:
-            print_student_list(slist);
-            break;
         case 11:
             merge_sort(&slist, compare_stu_no);
+            puts("Print student table, sorted by no.");
             print_student_list(slist);
             break;
         case 12:
             merge_sort(&slist, compare_stu_name);
+            puts("Print student table, sorted by name.");
             print_student_list(slist);
             break;
         case 13:
             merge_sort(&slist, compare_stu_speciality);
+            puts("Print student table, sorted by speciality.");
+            print_student_list(slist);
+            break;
+        case 14:
+            merge_sort(&slist, compare_stu_average_score);
+            puts("Print student table, sorted by average score.");
             print_student_list(slist);
             break;
         case 2:
-            print_course_score_list(clist);        
+        case 21:
+            merge_sort(&clist, compare_course_stuno);
+            puts("Print course score table, sorted by student no.");
+            print_course_score_list(clist);
+            break;
+        case 22:
+            merge_sort(&clist, compare_course_name);
+            puts("Print course score table, sorted by course name.");
+            print_course_score_list(clist);
+            break;
+        case 23:
+            merge_sort(&clist, compare_course_credit);
+            puts("Print course score table, sorted by course credit.");
+            print_course_score_list(clist);
+            break;
+        case 24:
+            merge_sort(&clist, compare_course_student_score);
+            puts("Print course score table, sorted by student score.");
+            print_course_score_list(clist);
             break;
         case 3:
+        case 31:
+            merge_sort(&jlist, compare_joined_student_no);
+            puts("Print the joined table, sorted by student no.");
+            print_joined_list(jlist);
+            break;    
+        case 32:
             merge_sort(&jlist, compare_joined_student_name);
+            puts("Print the joined table, sorted by studet name.");
+            print_joined_list(jlist);
+            break;    
+        case 33:
+            merge_sort(&jlist, compare_joined_student_score);
+            puts("Print the joined table, sorted by course score.");
             print_joined_list(jlist);
             break;    
         case 4:
