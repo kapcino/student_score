@@ -53,6 +53,7 @@ void menu()
     int choice = 0;
     while(1)
     {
+        choice = 0;             /* reset to 0 to avoid keeping the last valid value */
         puts("MENU");
         puts("Press  1: To print student table, as it is.");
         puts("Press 11: To print student table, sorted by no.");
@@ -78,23 +79,22 @@ void menu()
             print_student_list(slist);
             break;
         case 11:
-            MergeSort(&slist, compare_stu_no);
+            merge_sort(&slist, compare_stu_no);
             print_student_list(slist);
             break;
         case 12:
-            MergeSort(&slist, compare_stu_name);
+            merge_sort(&slist, compare_stu_name);
             print_student_list(slist);
             break;
         case 13:
-            MergeSort(&slist, compare_stu_speciality);
+            merge_sort(&slist, compare_stu_speciality);
             print_student_list(slist);
             break;
         case 2:
             print_course_score_list(clist);        
             break;
         case 3:
-            print_joined_list(jlist);
-            MergeSort(&jlist, compare_joimed_name);
+            merge_sort(&jlist, compare_joined_student_name);
             print_joined_list(jlist);
             break;    
         case 4:

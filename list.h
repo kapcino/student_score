@@ -36,20 +36,26 @@ typedef struct _node
     struct _node *next;
 } list;
 
-void add_element(list **head, void *data);
+void add_student_with_check(list **slist, char *no, char *name, int gender, char* speciality, char *department);
+void add_score_record_with_check(list **clist, char *stu_no, char *course_no, char *course_name, int course_credit, int stu_score);
+void join_lists(list **jlist, list *slist, list *clist);
 void destroy_list(list *head);
+
 void print_student_list(list *slist);
 void print_course_score_list(list *clist);
-void print_joinex_list(list *jlist);
-void add_student(list **slist, char *no, char *name, int gender, char* speciality, char *department);
-void add_student_with_check(list **slist, char *no, char *name, int gender, char* speciality, char *department);
-void add_score_record(list **clist, char *stu_no, char *course_no, char *course_name, int course_credit, int stu_score);
-void add_score_record_with_check(list **clist, char *stu_no, char *course_no, char *course_name, int course_credit, int stu_score);
-score_record *find_score_record(list *clist, char *stu_no, char *course_no);
-void join_lists(list **jlist, list *slist, list *clist);
+void print_joined_list(list *jlist);
+
 int compare_stu_no(list *a, list *b);
 int compare_stu_name(list *a, list *b);
 int compare_stu_speciality(list *a, list *b);
-int compare_joimed_no(list *a, list *b);
-int compare_joimed_name(list *a, list *b);
-list *mregesort(list *head, int (*cmp)(list *a, list *b));
+int compare_stu_average_score(list *a, list *b);
+
+int compare_course_stuno(list *a, list *b);
+int compare_course_cno(list *a, list *b);
+int compare_course_name(list *a, list *b);
+int compare_course_credit(list *a, list *b);
+int compare_course_student_score(list *a, list *b);
+
+int compare_joined_student_no(list *a, list *b);
+int compare_joined_student_name(list *a, list *b);
+void merge_sort(list **headRef, int (*cmp)(list *a, list *b));

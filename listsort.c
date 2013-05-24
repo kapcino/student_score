@@ -1,8 +1,8 @@
 #include "list.h"
 #include <stdio.h>
 
-/* split one list to two lists, and merge them */
-void FrontBackSplit(list *head, list **front, list **back)
+/* split one list to two sub lists, and merge them */
+void front_back_split(list *head, list **front, list **back)
 {
     list *fast;
     list *slow;
@@ -36,8 +36,8 @@ void FrontBackSplit(list *head, list **front, list **back)
 }
 
 /* cmp is a pointer to function, different cmp provides sorting with different criteria */
-/* cmp can compare no, name, score, etc. */
-list *SortedMerge(list *a, list *b, int (*cmp)(list *a, list *b))
+/* cmp can compare with no, name, score, etc. */
+list *sorted_merge(list *a, list *b, int (*cmp)(list *a, list *b))
 {
     list *result = NULL;
     if (!a) return b;
@@ -47,17 +47,17 @@ list *SortedMerge(list *a, list *b, int (*cmp)(list *a, list *b))
     if (cmp(a, b) <= 0)
     {
         result = a;
-        result->next = SortedMerge(a->next, b, cmp);
+        result->next = sorted_merge(a->next, b, cmp);
     }
     else
     {
         result = b;
-        result->next = SortedMerge(a, b->next, cmp);
+        result->next = sorted_merge(a, b->next, cmp);
     }
     return(result);
 }
 
-void MergeSort(list **headRef, int (*cmp)(list *a, list *b))
+void merge_sort(list **headRef, int (*cmp)(list *a, list *b))
 {
     list *head = *headRef;
     list *a = NULL;
@@ -66,8 +66,8 @@ void MergeSort(list **headRef, int (*cmp)(list *a, list *b))
     if ((head == NULL) || (head->next == NULL)) return;
 
     /* Split head into 'a' and 'b' sublists, recursively sort the sublists */
-    FrontBackSplit(head, &a, &b);
-    MergeSort(&a, cmp);
-    MergeSort(&b, cmp);
-    *headRef = SortedMerge(a, b, cmp);
+    front_back_split(head, &a, &b);
+    merge_sort(&a, cmp);
+    merge_sort(&b, cmp);
+    *headRef = sorted_merge(a, b, cmp);
 }
