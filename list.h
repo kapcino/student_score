@@ -68,4 +68,4 @@ void get_average_score_rank_name(list **slist, char *stu_name);
 void get_all_average_score_not_pass_no(list *slist, list **clist, char *speciality, char *course_no);
 void get_all_average_score_not_pass_name(list *slist, list **clist, char *speciality, char *course_name);
 
-void get_specific_students_speciality();
+void get_specific_students_speciality(list **slist, list *clist, float avg, int num);

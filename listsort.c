@@ -45,7 +45,7 @@ list *sorted_merge(list *a, list *b, float (*cmp)(list *a, list *b))
 
     /* Pick either a or b, and recur */
     /* for int, <= 0 is OK, but for float needs checking range*/
-    if ((cmp(a, b) <= 0.000000001)) 
+    if ((cmp(a, b) <= 0.000000001))
     {
         result = a;
         result->next = sorted_merge(a->next, b, cmp);

@@ -16,7 +16,7 @@ void add_element(list **head, void *data)
         list *cur = *head;
         while (cur->next) cur = cur->next;
         cur->next = element;
-    }    
+    }
 }
 
 void *get_element_data(list *element)
@@ -100,7 +100,7 @@ void add_student(list **slist, char *no, char *name, int gender, char* specialit
     strcpy(stu->stu_departmant, department);
     stu->stu_gender = gender;
     stu->stu_average_score = 0;
-    add_element(slist, (void *)stu); 
+    add_element(slist, (void *)stu);
 }
 
 void add_student_with_check(list **slist, char *no, char *name, int gender, char* speciality, char *department)
@@ -140,7 +140,7 @@ void destroy_list(list *head)
 {
     list *current_element = NULL;
     if (!head) return;
-    
+
     while (head)
     {
         current_element = head;
@@ -161,7 +161,7 @@ void print_student_list(list *slist)
     {
         student_element = (student *)(current_element->data);
         char gender = (student_element->stu_gender == 0) ? 'M' : 'F';
-        printf("student no: %7s, name: %10s, gender: %1c, speciality: %10s, department: %20s, average score: %5.4g\n", 
+        printf("student no: %7s, name: %10s, gender: %1c, speciality: %10s, department: %20s, average score: %5.4g\n",
                student_element->stu_no,
                student_element->stu_name,
                gender,
@@ -181,7 +181,7 @@ void print_course_score_list(list *clist)
     while (current_element)
     {
         record = (score_record *)current_element->data;
-        printf("student no: %7s, course no: %4s, course name: %10s, course credit: %1d, student score: %3d\n", 
+        printf("student no: %7s, course no: %4s, course name: %10s, course credit: %1d, student score: %3d\n",
                record->stu_no,
                record->course_no,
                record->course_name,
@@ -207,8 +207,8 @@ void print_joined_list(list *jlist)
                gender,
                ssrecord->stu_speciality,
                ssrecord->stu_departmant,
-               ssrecord->course_no, 
-               ssrecord->course_name, 
+               ssrecord->course_no,
+               ssrecord->course_name,
                ssrecord->course_credit,
                ssrecord->stu_score);
         current_element = current_element->next;
@@ -233,7 +233,7 @@ void join_lists(list **jlist, list *slist, list *clist)
         while (chead)
         {
             rec = get_score_record(chead); /* get the score record in clist */
-            if (strcmp(stu->stu_no, rec->stu_no) != 0) 
+            if (strcmp(stu->stu_no, rec->stu_no) != 0)
             {
                 chead = chead->next;
                 continue;                  /* not the same record for the student no */
@@ -416,7 +416,7 @@ void get_average_score_rank_no(list **slist, char *stu_no)
         total_student ++;
         cur = cur->next;
     }
-    
+
         int rank = total_student - position;
     if (found == 0)
         printf("Fail to find the info for student: %s.\n", stu_no);
@@ -533,7 +533,7 @@ void get_all_average_score_not_pass_no(list *slist, list **clist, char *speciali
     }
     else
         printf("Speciality: %7s, course: %7s, all average socre: 0.\n", speciality, course_no);
-    
+
     shead = slist;
     printf("Not passed student in speciality: %7s are:\n", speciality);
     printf("================\n");
@@ -547,7 +547,7 @@ void get_all_average_score_not_pass_no(list *slist, list **clist, char *speciali
         }
         shead = shead->next;
     }
-    
+
 }
 
 void get_all_average_score_not_pass_name(list *slist, list **clist, char *speciality, char *course_name)
@@ -564,9 +564,53 @@ void get_all_average_score_not_pass_name(list *slist, list **clist, char *specia
         get_all_average_score_not_pass_no(slist, clist, speciality, cno);
     else
         printf("Fail to find the course no with name: %s in list.\n", course_name);
-    
+
 }
 
-void get_specific_students_speciality()
+void get_specific_students_speciality(list **slist, list *clist, float avg, int num)
 {
+    if (!slist || !clist)
+    {
+        printf("get_specific_students_speciality: parameter error.\n");
+        return;
+    }
+
+    merge_sort(slist, compare_stu_average_score);
+    list *shead = *slist;
+    list *chead = clist;
+    student *stu = NULL;
+    score_record *rec = NULL;
+    int course_num = 0;
+
+    while (shead)
+    {
+        stu = get_student(shead);
+        if (stu->stu_average_score - avg < 0.0000000001)
+        {
+            shead = shead->next;
+            continue;
+        }
+
+        if (!chead) chead = clist;
+        while (chead)
+        {
+            rec = get_score_record(chead);
+            if (strcmp(rec->stu_no, stu->stu_no) != 0)
+            {
+                chead = chead->next;
+                continue;
+            }
+            course_num ++;
+            rec = NULL;
+            chead = chead->next;
+        }
+
+        if (course_num >= num)
+        {
+            printf("Student no: %s, student name: %s, speciality: %s.\n", stu->stu_no, stu->stu_name, stu->stu_speciality);
+        }
+        course_num = 0;
+        stu = NULL;
+        shead = shead->next;
+    }
 }
