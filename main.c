@@ -9,26 +9,26 @@ void create_student_list(list **slist)
     add_student_with_check(slist, "2012007", "Tong Xuan",  1, "Computer",   "Applied Technology");
     add_student_with_check(slist, "2012008", "Xiao Xia",   1, "Traffic",   "Applied Technology");
     add_student_with_check(slist, "2012009", "Xiang Gang", 0, "Computer",   "Applied Technology");
-    add_student_with_check(slist, "2012010", "Lu Jia",     0, "Accounting", "Applied Technology");
+    add_student_with_check(slist, "2012010", "Lu Jia",     0, "Accounting", "Information");
 
     add_student_with_check(slist, "2012001", "Zhang Nan",  0, "Computer",   "Applied Technology");
     add_student_with_check(slist, "2012002", "Li Wei",     0, "Economy",    "Applied Technology");
-    add_student_with_check(slist, "2012003", "Jin Gang",   0, "Language",   "Applied Technology");
+    add_student_with_check(slist, "2012003", "Jin Gang",   0, "Language",   "Management");
     add_student_with_check(slist, "2012004", "Li Xue",     1, "Culture",    "Applied Technology");
-    add_student_with_check(slist, "2012005", "Hui Nan",    1, "Computer",   "Applied Technology");
+    add_student_with_check(slist, "2012005", "Hui Nan",    1, "Computer",   "Finance");
     add_student_with_check(slist, "2012006", "Liu Xiang",  0, "Vehicle",     "Applied Technology");
     puts("Finish to create student list.");
 }
 
 void create_course_list(list **clist)
 {
-    add_score_record_with_check(clist, "2012001", "1001", "History",  1, 80);
-    add_score_record_with_check(clist, "2012001", "1002", "Politics", 2, 70);
-    add_score_record_with_check(clist, "2012001", "1003", "English",  3, 80);
+    add_score_record_with_check(clist, "2012001", "1001", "History",  1, 67);
+    add_score_record_with_check(clist, "2012001", "1002", "Politics", 2, 93);
+    add_score_record_with_check(clist, "2012001", "1003", "English",  3, 81);
     add_score_record_with_check(clist, "2012001", "1004", "Math",     4, 90);
 
     add_score_record_with_check(clist, "2012002", "1001", "History",  1, 60);
-    add_score_record_with_check(clist, "2012002", "1002", "Politics", 2, 70);
+    add_score_record_with_check(clist, "2012002", "1002", "Politics", 2, 73);
     add_score_record_with_check(clist, "2012002", "1003", "English",  3, 78);
     add_score_record_with_check(clist, "2012002", "1004", "Math",     4, 84);
 
@@ -38,6 +38,26 @@ void create_course_list(list **clist)
 
     add_score_record_with_check(clist, "2012004", "1001", "History",  1, 73);
     add_score_record_with_check(clist, "2012004", "1004", "Math",     4, 69);
+
+    add_score_record_with_check(clist, "2012005", "1001", "History",  1, 82);
+    add_score_record_with_check(clist, "2012005", "1003", "English",  3, 97);
+
+    add_score_record_with_check(clist, "2012006", "1001", "History",  1, 69);
+    add_score_record_with_check(clist, "2012006", "1003", "English",  3, 93);
+
+    add_score_record_with_check(clist, "2012007", "1001", "History",  1, 79);
+    add_score_record_with_check(clist, "2012007", "1002", "Politics", 2, 93);
+    add_score_record_with_check(clist, "2012007", "1004", "Math",     4, 85);
+
+    add_score_record_with_check(clist, "2012008", "1001", "History",  1, 49);
+    add_score_record_with_check(clist, "2012008", "1002", "Politics", 2, 84);
+    add_score_record_with_check(clist, "2012008", "1003", "English",  3, 73);
+
+    add_score_record_with_check(clist, "2012009", "1002", "Politics", 2, 81);
+    add_score_record_with_check(clist, "2012009", "1004", "Math",     4, 86);
+
+    add_score_record_with_check(clist, "2012010", "1004", "Math",     4, 23);
+
     puts("Finish to create score record list.");
 }
 
@@ -51,6 +71,9 @@ void menu()
     join_lists(&jlist, slist, clist);
 
     int choice = 0;
+    char stuno[128] = {0};
+    char speciality[128] = {0};
+    char coursename[128] = {0};
     while(1)
     {
         choice = 0;             /* reset to 0 to avoid keeping the last valid value */
@@ -67,6 +90,11 @@ void menu()
         puts("Press 31: To print the joined table, sorted by student no.");
         puts("Press 32: To print the joined table, sorted by studet name.");
         puts("Press 33: To print the joined table, sorted by course score.");
+        puts("Press 41: To print student's average score and rank, with student no.");
+        puts("Press 42: To print student's average score and rank, with student name.");
+        puts("Press 43: To print all student's average score, and not passed students, with speciality and course no.");
+        puts("Press 43: To exit the PROGRAM.");
+        puts("Press  4: To exit the PROGRAM.");
         puts("Press  4: To exit the PROGRAM.");
         puts("***********************************************************");
         printf("Enter your choice here : ");
@@ -133,7 +161,24 @@ void menu()
             print_joined_list(jlist);
             break;    
         case 4:
-            get_average_score_rank_no(slist, clist, "2012002");
+        case 41:
+            memset(stuno, 0, 128);
+            printf("Please enter the student no.: ");
+            scanf("%s", stuno);
+            get_average_score_rank_no(&slist, stuno);
+            break;
+        case 42:
+            memset(speciality, 0, 128);
+            memset(coursename, 0, 128);
+            printf("Please enter the speciality and course no: ");
+            scanf("speciality: %s, course name: %s", speciality, coursename);
+            get_all_average_score_not_pass_no(
+            break;
+        case 43:
+            memset(stuno, 0, 128);
+            printf("Please enter the student no.: ");
+            scanf("%s", stuno);
+            get_average_score_rank_no(&slist, stuno);
             break;
         case 6:
             destroy_list(slist);

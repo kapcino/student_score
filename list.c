@@ -161,7 +161,7 @@ void print_student_list(list *slist)
     {
         student_element = (student *)(current_element->data);
         char gender = (student_element->stu_gender == 0) ? 'M' : 'F';
-        printf("student no: %7s, name: %10s, gender: %1c, speciality: %10s, department: %15s, average score: %5.4g\n", 
+        printf("student no: %7s, name: %10s, gender: %1c, speciality: %10s, department: %20s, average score: %5.4g\n", 
                student_element->stu_no,
                student_element->stu_name,
                gender,
@@ -201,7 +201,7 @@ void print_joined_list(list *jlist)
     {
         ssrecord = (student_score_record*)current_element->data;
         char gender = (ssrecord->stu_gender == 0) ? 'M' : 'F';
-        printf("SNo: %7s, SName: %10s, SGd: %c, Spec: %10s, Dept: %10s, CNo: %4s, CName: %10s, CCredit: %1d, Score: %3d\n",
+        printf("SNo: %7s, SName: %10s, SGd: %c, Spec: %10s, Dept: %20s, CNo: %4s, CName: %10s, CCredit: %1d, Score: %3d\n",
                ssrecord->stu_no,
                ssrecord->stu_name,
                gender,
@@ -229,12 +229,6 @@ void join_lists(list **jlist, list *slist, list *clist)
     while (shead)
     {
         stu = get_student(shead); /* get the student in the slist */
-        if (!stu)
-        {
-            shead = shead->next;
-            continue;            /* NULL pinter checking */
-        }
-
         if (chead == NULL) chead = clist;  /* two loops, reset the second pointer when it reaches end */
         while (chead)
         {
@@ -367,31 +361,43 @@ float compare_joined_student_score(list *a, list *b)
     return reca->stu_score - recb->stu_score;
 }
 
-
-void get_average_score_rank_no(list *slist, list *clist, char *stu_no)
+char *get_student_no_with_name(list *slist, char *stu_name)
 {
-    if (!slist || !clist || !stu_no)
+    list *head = slist;
+    student *stu = NULL;
+    char sno[128] = {0};
+    while (head)
+    {
+        stu = get_student(head);
+        if (strcmp(stu->stu_name, stu_name) == 0)
+        {
+            strcpy(sno, stu->stu_no);
+            break;
+        }
+        head = head->next;
+    }
+    return sno;
+}
+
+void get_average_score_rank_no(list **slist, char *stu_no)
+{
+    if (!slist || !stu_no)
     {
         printf("get_average_score_rank:Parameter error.\n");
         return;
     }
-
-    list *jlist = NULL;
-    list *shead = slist;
-    join_lists(&jlist, slist, clist);
-    merge_sort(&shead, compare_stu_average_score);
 
     student *stu = NULL;
     int position = 0;
     int total_student = 0;
     float avg_score = 0.0;
     int found = 0;
-    list *cur = shead;    
-    
+    merge_sort(slist, compare_stu_average_score);
+    list *cur = *slist;
     while (cur)
     {
         stu = get_student(cur);
-        if (strcmp(stu->stu_no, stu_no) != 0) /* not find the target student */
+        if ((strcmp(stu->stu_no, stu_no) != 0) && (found != 1)) /* not find the target student */
             position ++;                      /* save the position */
         else
         {
@@ -402,23 +408,130 @@ void get_average_score_rank_no(list *slist, list *clist, char *stu_no)
         cur = cur->next;
     }
     
-    destroy_list(jlist);
-    int rank = total_student - position;
+        int rank = total_student - position;
     if (found == 0)
         printf("Fail to find the info for student: %s.\n", stu_no);
     else
         printf("Find student: %7s, average score: %5.4g, rank: %3d.\n", stu_no, avg_score, rank);
 }
 
-void get_average_score_rank_name(list *slist, list *clist, char *stu_no)
+void get_average_score_rank_name(list **slist, char *stu_name)
 {
+    if (!slist || !stu_name)
+    {
+        printf("get_average_score_rank:Parameter error.\n");
+        return;
+    }
+
+    char sno[128] = {0};
+    strcpy(sno, get_student_no_with_name(slist, stu_name));
+    if (strlen(sno) != 0)
+        get_average_score_rank_no(slist, sno);
+    else
+        printf("fail to get the student with name: %s.\n", stu_name);
 }
 
-void get_all_average_score_not_pass_no(char *speciality, char *course_no)
+char *get_course_no_with_name(list *clist, char *cname)
 {
+    list *head = clist;
+    score_record *rec = NULL;
+    char cno[128] = {0};
+    while (head)
+    {
+        rec = get_score_record(head);
+        if (strcmp(rec->course_name, cname) == 0)
+        {
+            strcpy(cno, rec->course_no);
+            break;
+        }
+        head = head->next;
+    }
+    return cno;
 }
-void get_all_average_score_not_pass_name(char *speciality, char *course_name)
+
+void get_all_average_score_not_pass_no(list *slist, list *clist, char *speciality, char *course_no)
 {
+    list *shead = slist;
+    list *chead = clist;
+    merge_sort(&chead, compare_course_student_score); /* sorting by score */
+    int total_score = 0;
+    int total_weighed_score = 0;
+    float average_score = 0;
+    student *stu = NULL;
+    score_record *rec = NULL;
+    char nopass_no[50][16];   /* max number of not passed student is 50 */
+    int index = 0;
+
+    while (shead)
+    {
+        stu = get_student(shead); /* get the student in the slist */
+        if (strcmp(stu->stu_speciality, speciality) != 0) /* not the specific speciality */
+        {
+            shead = shead->next;
+            continue;                  /* not the same record for the student speciality */
+        }
+
+        if (chead == NULL) chead = clist;  /* two loops, reset the second pointer when it reaches end */
+        while (chead)
+        {
+            rec = get_score_record(chead); /* get the score record in clist */
+            if (strcmp(rec->course_no, course_no) != 0) /* not the specific course*/
+            {
+                chead = chead->next;
+                continue;
+            }
+
+            if (rec->stu_score <60)
+            {
+                strcpy(nopass_no[index], rec->stu_no);
+                index ++;
+            }
+
+            total_score += rec->stu_score;
+            total_weighed_score += (rec->course_credit * rec->stu_score);
+            rec = NULL;
+            chead = chead->next;
+        }
+
+        stu = NULL;
+        shead = shead->next;
+    }
+
+    if (total_score != 0)
+    {
+        average_score = total_weighed_score / (float)total_score;
+        printf("Speciality: %7s, course: %7s, all average socre: %5.4f\n", speciality, course_no, average_score);
+    }
+    
+    shead = slist;
+    printf("Not passed student in speciality: %7s are:\n", speciality);
+    while (shead)      /* find the student name with student no, and print out */
+    {
+        stu = get_student(shead);
+        for (int i = 0; i <50; i++)
+        {
+            if (strcmp(stu->stu_no, nopass_no[i]) == 0)
+                printf("%7s\n", stu->stu_name);
+        }
+    }
+    
+}
+
+void get_all_average_score_not_pass_name(list *slist, list *clist, char *speciality, char *course_name)
+{
+    if (!slist || !clist || !course_name)
+    {
+        printf("get_all_average_score_not_pass_name: parameter error.\n");
+        return;
+    }
+
+    char cno[128] = {0};
+    strcpy(cno, get_course_no_with_name(clist, course_name));
+    if (strlen(cno) != 0)
+        get_all_average_score_not_pass_no(slist, clist, speciality, cno);
+    else
+        printf("Fail to find the course no with name: %s in list.\n", course_name);
+    
 }
 
 void get_specific_students_speciality()
