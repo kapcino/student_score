@@ -22,9 +22,9 @@ void create_student_list(list **slist)
 
 void create_course_list(list **clist)
 {
-    add_score_record_with_check(clist, "2012001", "1001", "History",  1, 67);
+    add_score_record_with_check(clist, "2012001", "1001", "History",  1, 97);
     add_score_record_with_check(clist, "2012001", "1002", "Politics", 2, 93);
-    add_score_record_with_check(clist, "2012001", "1003", "English",  3, 81);
+    add_score_record_with_check(clist, "2012001", "1003", "English",  3, 91);
     add_score_record_with_check(clist, "2012001", "1004", "Math",     4, 90);
 
     add_score_record_with_check(clist, "2012002", "1001", "History",  1, 60);
@@ -74,6 +74,7 @@ void menu()
     char stuno[128] = {0};
     char speciality[128] = {0};
     char coursename[128] = {0};
+    char courseno[128] = {0};
     while(1)
     {
         choice = 0;             /* reset to 0 to avoid keeping the last valid value */
@@ -89,13 +90,12 @@ void menu()
         puts("Press 24: To print course score table, sorted by student score.");
         puts("Press 31: To print the joined table, sorted by student no.");
         puts("Press 32: To print the joined table, sorted by studet name.");
-        puts("Press 33: To print the joined table, sorted by course score.");
+        puts("Press 33: To print the joined table, sorted by course no.");
+        puts("Press 34: To print the joined table, sorted by course score.");
         puts("Press 41: To print student's average score and rank, with student no.");
-        puts("Press 42: To print student's average score and rank, with student name.");
-        puts("Press 43: To print all student's average score, and not passed students, with speciality and course no.");
-        puts("Press 43: To exit the PROGRAM.");
-        puts("Press  4: To exit the PROGRAM.");
-        puts("Press  4: To exit the PROGRAM.");
+        puts("Press 42: To print average score of course with specific speciality, and not passed students.");
+        puts("Press 43: To print student name, speciality whith average >= 2.5 and has 3 courses.");
+        puts("Press  5: To exit the PROGRAM.");
         puts("***********************************************************");
         printf("Enter your choice here : ");
         scanf("%d", &choice);
@@ -156,6 +156,11 @@ void menu()
             print_joined_list(jlist);
             break;    
         case 33:
+            merge_sort(&jlist, compare_joined_course_no);
+            puts("Print the joined table, sorted by course no.");
+            print_joined_list(jlist);
+            break;
+        case 34:
             merge_sort(&jlist, compare_joined_student_score);
             puts("Print the joined table, sorted by course score.");
             print_joined_list(jlist);
@@ -169,18 +174,17 @@ void menu()
             break;
         case 42:
             memset(speciality, 0, 128);
-            memset(coursename, 0, 128);
-            printf("Please enter the speciality and course no: ");
-            scanf("speciality: %s, course name: %s", speciality, coursename);
-            get_all_average_score_not_pass_no(
+            memset(courseno, 0, 128);
+            printf("Please enter the speciality: ");
+            scanf("%s", speciality);
+            printf("and course no: ");
+            scanf("%s", courseno);
+            get_all_average_score_not_pass_no(slist, &clist, speciality, courseno);
             break;
         case 43:
-            memset(stuno, 0, 128);
-            printf("Please enter the student no.: ");
-            scanf("%s", stuno);
-            get_average_score_rank_no(&slist, stuno);
+            
             break;
-        case 6:
+        case 5:
             destroy_list(slist);
             destroy_list(clist);
             puts("Exit program.");
